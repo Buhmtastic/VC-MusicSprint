@@ -93,7 +93,7 @@ class CourseVisualizer:
             output_path = Path(output_path)
             output_path.parent.mkdir(parents=True, exist_ok=True)
             plt.savefig(output_path, dpi=self.DPI, facecolor=fig.get_facecolor())
-            print(f"✅ 코스 시각화 저장: {output_path}")
+            print(f"[OK] Course visualization saved: {output_path}")
 
         # 표시
         if show:
@@ -243,7 +243,7 @@ class CourseVisualizer:
 
         if output_path:
             plt.savefig(output_path, dpi=self.DPI, facecolor=fig.get_facecolor())
-            print(f"✅ 코스 비교 시각화 저장: {output_path}")
+            print(f"[OK] Course comparison visualization saved: {output_path}")
 
         if show:
             plt.show()

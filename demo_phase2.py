@@ -1,13 +1,14 @@
+# -*- coding: utf-8 -*-
 """
-Phase 2 데모 스크립트
-코스 생성 시스템 테스트
+Phase 2 Demo Script
+Course Generation System Test
 """
 
 import sys
 from pathlib import Path
 import numpy as np
 
-# 프로젝트 루트를 경로에 추가
+# Add project root to path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from src.audio.audio_analyzer import AudioAnalyzer
@@ -16,14 +17,14 @@ from src.course.visualizer import CourseVisualizer
 
 
 def main():
-    """Phase 2 데모 실행"""
+    """Phase 2 Demo Execution"""
     print("\n" + "="*70)
-    print("  🎵 Music Sprint - Phase 2 데모")
-    print("  코스 생성 시스템 테스트")
+    print("  Music Sprint - Phase 2 Demo")
+    print("  Course Generation System Test")
     print("="*70 + "\n")
 
-    # 1. 더미 오디오 생성
-    print("1️⃣  더미 오디오 데이터 생성 중...")
+    # 1. Generate dummy audio
+    print("[1] Generating dummy audio data...")
     sample_rate = 22050
     duration = 5.0
     frequency = 440.0
@@ -34,43 +35,43 @@ def main():
     envelope = 0.5 + 0.5 * np.sin(2 * np.pi * 3 * t)  # 3Hz 모듈레이션
     waveform = envelope * np.sin(2 * np.pi * frequency * t)
 
-    print(f"   ✅ 생성 완료: {duration}초, {frequency}Hz")
+    print(f"   [OK] Generated: {duration}s, {frequency}Hz")
 
-    # 2. 오디오 분석
-    print("\n2️⃣  오디오 분석 중...")
+    # 2. Audio analysis
+    print("\n[2] Analyzing audio...")
     analyzer = AudioAnalyzer()
     features = analyzer.analyze(waveform, sample_rate)
 
-    print(f"   ✅ 분석 완료:")
-    print(f"      - 총 길이: {features['duration']:.2f}초")
-    print(f"      - 비트 개수: {features['beats']['count']}개")
-    print(f"      - 템포: {features['tempo']['bpm']:.1f} BPM")
-    print(f"      - 난이도: {features['difficulty']['level']} ({features['difficulty']['score']:.1f}/100)")
+    print(f"   [OK] Analysis complete:")
+    print(f"      - Duration: {features['duration']:.2f}s")
+    print(f"      - Beats: {features['beats']['count']}")
+    print(f"      - Tempo: {features['tempo']['bpm']:.1f} BPM")
+    print(f"      - Difficulty: {features['difficulty']['level']} ({features['difficulty']['score']:.1f}/100)")
 
-    # 3. 코스 생성
-    print("\n3️⃣  코스 생성 중...")
+    # 3. Course generation
+    print("\n[3] Generating course...")
     generator = CourseGenerator(seed=42)
     course = generator.generate(features, course_name="Demo Course - 440Hz")
 
     stats = course.get_statistics()
-    print(f"   ✅ 코스 생성 완료:")
-    print(f"      - 총 장애물: {stats['total_obstacles']}개")
-    print(f"      - Beat 장애물: {stats['by_type']['beat']}개")
-    print(f"      - Frequency 장애물: {stats['by_type']['frequency']}개")
-    print(f"      - Amplitude 장애물: {stats['by_type']['amplitude']}개")
-    print(f"      - 밀도: {stats['density']:.2f} obstacles/sec")
+    print(f"   [OK] Course generation complete:")
+    print(f"      - Total obstacles: {stats['total_obstacles']}")
+    print(f"      - Beat obstacles: {stats['by_type']['beat']}")
+    print(f"      - Frequency obstacles: {stats['by_type']['frequency']}")
+    print(f"      - Amplitude obstacles: {stats['by_type']['amplitude']}")
+    print(f"      - Density: {stats['density']:.2f} obstacles/sec")
 
-    # 4. 코스 시각화
-    print("\n4️⃣  코스 시각화 중...")
+    # 4. Course visualization
+    print("\n[4] Visualizing course...")
     visualizer = CourseVisualizer()
 
     output_path = "assets/phase2_demo_course.png"
     visualizer.visualize(course, output_path=output_path, show=False)
 
-    print(f"   ✅ 시각화 저장: {output_path}")
+    print(f"   [OK] Visualization saved: {output_path}")
 
-    # 5. 장애물 샘플 출력
-    print("\n5️⃣  장애물 샘플 (처음 10개):")
+    # 5. Obstacle samples
+    print("\n[5] Obstacle Samples (first 10):")
     print("   " + "-"*66)
     print(f"   {'Time':>8} | {'Type':^12} | {'Height':>8} | {'Color':^15}")
     print("   " + "-"*66)
@@ -81,23 +82,23 @@ def main():
               f"{info['height']:>8.1f} | {str(info['color']):^15}")
 
     if course.obstacle_count > 10:
-        print(f"   ... (총 {course.obstacle_count}개)")
+        print(f"   ... (total {course.obstacle_count} obstacles)")
     print("   " + "-"*66)
 
-    # 6. 다형성 데모
-    print("\n6️⃣  다형성 테스트:")
-    print("   모든 Obstacle 타입을 동일한 방식으로 처리 가능")
+    # 6. Polymorphism demo
+    print("\n[6] Polymorphism Test:")
+    print("   All Obstacle types can be handled uniformly")
 
     sample_obstacles = course.obstacles[:5]
     for obs in sample_obstacles:
-        # 모든 Obstacle은 동일한 인터페이스 제공
+        # All Obstacles provide the same interface
         print(f"   - {obs.get_type().value:12} @ {obs.time:.2f}s: "
               f"height={obs.get_height():.1f}, color={obs.get_color()}")
 
-    # 완료
+    # Complete
     print("\n" + "="*70)
-    print("  ✅ Phase 2 데모 완료!")
-    print("  다음 단계: Phase 3 (캐릭터 및 자동 플레이)")
+    print("  [SUCCESS] Phase 2 Demo Complete!")
+    print("  Next: Phase 3 (Character & Auto-Play)")
     print("="*70 + "\n")
 
 
@@ -105,6 +106,6 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        print(f"\n❌ 에러 발생: {e}")
+        print(f"\n[ERROR] Exception occurred: {e}")
         import traceback
         traceback.print_exc()
