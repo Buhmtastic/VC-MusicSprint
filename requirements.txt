@@ -1,0 +1,15 @@
+# Music Sprint - Phase 1 Requirements
+
+# Audio Processing
+librosa>=0.10.0
+numpy>=1.24.0
+soundfile>=0.12.0
+
+# Game Engine (for future phases)
+pygame>=2.5.0
+
+# UI
+# tkinter is built-in with Python
+
+# Testing
+pytest>=7.4.0
