@@ -2,11 +2,11 @@
 
 > An idle runner where every song creates a unique level. Your character automatically dodges obstacles generated from music beats, frequencies, and amplitudes in real-time.
 
-## Project Status: Phase 2 Completed
+## Project Status: Phase 3 Completed
 
-**Current milestone**: Course Generation System ✅
-**Completed**: Phase 1 (Audio Analysis) + Phase 2 (Course Generation)
-**Next**: Phase 3 (Character & Auto-Play)
+**Current milestone**: Character & Auto-Play System ✅
+**Completed**: Phase 1 (Audio Analysis) + Phase 2 (Course Generation) + Phase 3 (Character & Auto-Play)
+**Next**: Phase 4 (Scoring & Results)
 
 ## What is Music Sprint?
 
@@ -65,6 +65,41 @@ Music Sprint is a music-driven idle runner game where:
   - Statistics overlay
   - PNG export and multi-course comparison
 
+### Phase 3: Character & Auto-Play System ✅
+
+**Completed Features:**
+- **Character Class** (OOP Encapsulation)
+  - Private attributes (_x, _y, _velocity_y) with property accessors
+  - Physics simulation (gravity, jumping, landing)
+  - State management (RUNNING, JUMPING, DUCKING)
+  - Auto-jump and auto-duck methods
+
+- **AutoPlayController** (Strategy Pattern)
+  - AI decision-making system
+  - Obstacle-specific avoidance strategies:
+    - BeatObstacle → Jump
+    - FrequencyWall → Jump (mid) or Duck (high)
+    - AmplitudeGap → Jump (large gaps)
+  - Reaction time simulation (150ms)
+  - Difficulty scaling (0.0~2.0)
+
+- **Game Class** (Main Game Loop)
+  - Music synchronization (±50ms accuracy)
+  - Active obstacle management (±2s window)
+  - AABB collision detection
+  - Score calculation system
+  - Game state management (NOT_STARTED, PLAYING, PAUSED, FINISHED)
+
+- **GameRenderer** (PyGame Rendering)
+  - Character animations (running, jumping, ducking)
+  - Real-time waveform background
+  - Obstacle rendering with color coding
+  - UI elements (score, time, progress)
+  - 60 FPS stable rendering
+
+- **Test Suite**: 29 unit tests (100% pass rate)
+- **Demo Application**: Interactive PyGame demo with auto-play
+
 ### Project Structure
 
 ```
@@ -73,22 +108,30 @@ music_sprint/
 │   ├── audio/
 │   │   ├── audio_loader.py        # Audio file loading
 │   │   └── audio_analyzer.py      # Waveform analysis
-│   ├── course/                     # ✨ Phase 2
+│   ├── course/                     # Phase 2
 │   │   ├── obstacle.py            # Obstacle hierarchy (ABC)
 │   │   ├── course.py              # Course management
 │   │   ├── course_generator.py   # Factory pattern
 │   │   └── visualizer.py          # Visualization
+│   ├── game/                       # ✨ Phase 3
+│   │   ├── character.py           # Character physics & state
+│   │   ├── auto_play_controller.py # AI decision-making
+│   │   ├── game.py                # Main game loop
+│   │   └── renderer.py            # PyGame rendering
 │   ├── ui/
 │   │   └── file_dialog.py         # File selection UI
 │   └── main.py                    # Phase 1 demo
 ├── tests/
 │   ├── test_audio.py              # Phase 1 tests
-│   └── test_course.py             # Phase 2 tests
+│   ├── test_course.py             # Phase 2 tests
+│   └── test_game.py               # ✨ Phase 3 tests
 ├── demo_phase2.py                 # Phase 2 demo
+├── demo_phase3.py                 # ✨ Phase 3 demo
 ├── assets/
 │   └── sample_music/              # Sample audio files
 ├── 20251118_DevLog_MS01.md        # Phase 1 dev log
 ├── 20251118_DevLog_MS02.md        # Phase 2 dev log
+├── 20251118_DevLog_MS03.md        # ✨ Phase 3 dev log
 └── requirements.txt
 ```
 
@@ -146,6 +189,23 @@ This will:
 4. Display obstacle statistics
 5. Save course visualization to `assets/phase2_demo_course.png`
 
+### Phase 3 Demo: Character & Auto-Play
+
+```bash
+python demo_phase3.py
+```
+
+This will:
+1. Generate test audio (10s with beat pattern)
+2. Analyze audio and generate course
+3. Launch PyGame window with auto-play demonstration
+4. Show character automatically dodging obstacles
+5. Display real-time score and statistics
+
+**Controls:**
+- SPACE: Start game
+- ESC: Exit
+
 ### Run tests
 
 ```bash
@@ -184,12 +244,25 @@ This project strictly follows Object-Oriented Programming principles with advanc
 - **Factory Pattern**: `CourseGenerator.generate()` creates Course objects
 - **Abstract Base Classes**: Python's ABC module for enforcing interfaces
 
+**Phase 3:**
+- **Strategy Pattern**: `AutoPlayController` selects different strategies per obstacle type
+  - `_strategy_for_beat()`: Jump strategy
+  - `_strategy_for_frequency()`: Duck or jump based on height
+  - `_strategy_for_amplitude()`: Jump for large gaps
+- **Encapsulation**: Character internal state (`_x`, `_y`, `_velocity_y`) with property accessors
+- **Dependency Injection**: Game receives Course and waveform externally
+- **State Pattern**: Character states (RUNNING, JUMPING, DUCKING)
+
 ### SOLID Compliance
 
 - **S**ingle Responsibility: Each class has one job
   - `Course`: Obstacle management only
   - `CourseGenerator`: Course creation only
   - `CourseVisualizer`: Visualization only
+  - `Character`: Physics and state only
+  - `AutoPlayController`: Decision-making only
+  - `Game`: Game loop coordination only
+  - `GameRenderer`: Rendering only
 - **O**pen/Closed: Extensible for new obstacle types without modifying existing code
 - **L**iskov Substitution: All `Obstacle` subclasses are interchangeable
 - **I**nterface Segregation: Minimal, focused interfaces
@@ -218,11 +291,16 @@ This project strictly follows Object-Oriented Programming principles with advanc
 - [x] Unit tests and integration tests
 - [x] DevLog (20251118_DevLog_MS02.md)
 
-### Phase 3: Character & Auto-Play (Week 4.5-6.5)
-- [ ] Character class with auto-jump/duck
-- [ ] AutoPlayController (Strategy pattern)
-- [ ] Game main loop with music synchronization
-- [ ] PyGame rendering
+### Phase 3: Character & Auto-Play ✅ COMPLETED
+- [x] Character class with auto-jump/duck
+- [x] AutoPlayController (Strategy pattern)
+- [x] Game main loop with music synchronization
+- [x] Collision detection (AABB)
+- [x] PyGame rendering
+- [x] Character animations (running, jumping, ducking)
+- [x] Waveform background rendering
+- [x] Unit tests (29 tests - 100% pass)
+- [x] DevLog (20251118_DevLog_MS03.md)
 
 ### Phase 4: Game Loop & Scoring (Week 7-8.5)
 - [ ] ScoreManager class
