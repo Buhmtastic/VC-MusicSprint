@@ -19,6 +19,9 @@ from .character import Character
 from .auto_play_controller import AutoPlayController, Action
 from ..course.course import Course
 from ..course.obstacle import Obstacle
+from ..score.score_manager import ScoreManager
+from ..score.statistics_tracker import StatisticsTracker
+from ..score.difficulty_analyzer import DifficultyAnalyzer
 
 
 class GameState(Enum):
@@ -84,12 +87,21 @@ class Game:
         self._character = Character(x=100.0)
         self._controller = AutoPlayController(difficulty=1.0)
 
+        # Phase 4: 점수 및 통계 시스템
+        self._score_manager = ScoreManager()
+        self._statistics_tracker = StatisticsTracker()
+        self._difficulty_analyzer = DifficultyAnalyzer()
+
+        # 난이도 분석 (코스 기반)
+        self._difficulty_info = self._difficulty_analyzer.analyze_difficulty_from_course(course)
+        self._difficulty_level = self._difficulty_info['difficulty_level']
+
         # 게임 상태
         self._state = GameState.NOT_STARTED
         self._current_time = 0.0
         self._start_real_time = 0.0
 
-        # 점수 및 통계
+        # 점수 및 통계 (호환성 유지)
         self._score = 0
         self._obstacles_avoided = 0
         self._obstacles_hit = 0
@@ -127,6 +139,9 @@ class Game:
 
         # 시간 업데이트
         self._current_time += delta_time
+
+        # Phase 4: 통계 추적 - 시간 업데이트
+        self._statistics_tracker.update_game_duration(self._current_time)
 
         # 음악 종료 체크
         if self._current_time >= self._course.duration:
@@ -191,6 +206,21 @@ class Game:
         """현재 화면에 보이는 장애물 리스트"""
         return self._active_obstacles
 
+    @property
+    def score_manager(self):
+        """ScoreManager 인스턴스 (Phase 4)"""
+        return self._score_manager
+
+    @property
+    def statistics_tracker(self):
+        """StatisticsTracker 인스턴스 (Phase 4)"""
+        return self._statistics_tracker
+
+    @property
+    def difficulty_level(self) -> str:
+        """난이도 레벨 (Phase 4)"""
+        return self._difficulty_level
+
     def get_statistics(self) -> dict:
         """
         게임 통계
@@ -203,16 +233,31 @@ class Game:
         if total_obstacles > 0:
             success_rate = (self._obstacles_avoided / total_obstacles) * 100.0
 
+        # Phase 4: 확장된 통계
+        stats_summary = self._statistics_tracker.get_summary()
+
         return {
+            # 기본 정보
             'score': self._score,
             'current_time': self._current_time,
             'duration': self._course.duration,
             'progress': (self._current_time / self._course.duration) * 100.0,
+            'state': self._state.value,
+
+            # 장애물 통계
             'obstacles_avoided': self._obstacles_avoided,
             'obstacles_hit': self._obstacles_hit,
             'perfect_dodges': self._perfect_dodges,
             'success_rate': success_rate,
-            'state': self._state.value
+
+            # Phase 4: 콤보 및 정확도
+            'current_combo': stats_summary['current_combo'],
+            'max_combo': stats_summary['max_combo'],
+            'timing_accuracy': stats_summary['timing_accuracy'],
+
+            # Phase 4: 난이도
+            'difficulty_level': self._difficulty_level,
+            'difficulty_score': self._difficulty_info['difficulty_score']
         }
 
     def get_waveform_slice(self, window_duration: float = 2.0) -> Optional[np.ndarray]:
@@ -349,14 +394,34 @@ class Game:
         self._obstacles_avoided += 1
         self._score += self.SCORE_PER_OBSTACLE_AVOIDED
 
+        # Phase 4: 통계 추적
+        self._statistics_tracker.track_obstacle_avoided()
+
         # TODO: 완벽한 타이밍 판정 (나중에 구현)
 
     def _on_collision(self, obstacle: Obstacle) -> None:
         """충돌 발생 시 처리"""
         self._obstacles_hit += 1
+
+        # Phase 4: 통계 추적
+        self._statistics_tracker.track_obstacle_hit()
+
         # NOTE: 현재는 충돌해도 게임이 계속됨 (이후 Phase에서 개선)
 
     def _finish_game(self) -> None:
         """게임 종료 처리"""
         self._state = GameState.FINISHED
         self._current_time = self._course.duration
+
+        # Phase 4: 최종 점수 계산
+        stats = self._statistics_tracker.get_summary()
+        score_info = self._score_manager.calculate_final_score(
+            obstacles_avoided=stats['obstacles_avoided'],
+            perfect_dodges=self._perfect_dodges,
+            max_combo=stats['max_combo'],
+            accuracy=stats['timing_accuracy'],
+            difficulty_level=self._difficulty_level
+        )
+
+        # 최종 점수 업데이트
+        self._score = score_info['final_score']

@@ -2,11 +2,11 @@
 
 > An idle runner where every song creates a unique level. Your character automatically dodges obstacles generated from music beats, frequencies, and amplitudes in real-time.
 
-## Project Status: Phase 3 Completed
+## Project Status: Phase 4 Completed
 
-**Current milestone**: Character & Auto-Play System ✅
-**Completed**: Phase 1 (Audio Analysis) + Phase 2 (Course Generation) + Phase 3 (Character & Auto-Play)
-**Next**: Phase 4 (Scoring & Results)
+**Current milestone**: Scoring & Statistics System ✅
+**Completed**: Phase 1 (Audio Analysis) + Phase 2 (Course Generation) + Phase 3 (Character & Auto-Play) + Phase 4 (Scoring & Statistics)
+**Next**: Phase 5 (Polish & MVP Release)
 
 ## What is Music Sprint?
 
@@ -100,6 +100,38 @@ Music Sprint is a music-driven idle runner game where:
 - **Test Suite**: 29 unit tests (100% pass rate)
 - **Demo Application**: Interactive PyGame demo with auto-play
 
+### Phase 4: Scoring & Statistics System ✅
+
+**Completed Features:**
+- **ScoreManager** (Score Calculation & High Score Management)
+  - Score calculation (obstacles avoided, perfect dodges, combo, accuracy)
+  - Difficulty multiplier (Easy 1.0x ~ Expert 2.5x)
+  - High score persistence (JSON-based, per-song)
+  - Play history tracking (last 10 plays)
+
+- **StatisticsTracker** (Game Metrics Collection)
+  - Jump/duck action tracking
+  - Combo tracking and max combo recording
+  - Timing accuracy calculation
+  - Success rate and average combo
+  - 15+ statistical metrics
+
+- **DifficultyAnalyzer** (Automatic Difficulty Analysis)
+  - BPM-based scoring (40% weight)
+  - Frequency variance scoring (30% weight)
+  - Beat density scoring (30% weight)
+  - 4-level difficulty system (easy/normal/hard/expert)
+  - Course-based difficulty analysis
+
+- **Game Integration**
+  - Integrated ScoreManager, StatisticsTracker, DifficultyAnalyzer
+  - Real-time statistics tracking during gameplay
+  - Automatic final score calculation on game end
+  - Difficulty-based score multiplier
+
+- **Test Suite**: 24 unit tests (100% pass rate)
+- **Demo Application**: Comprehensive scoring system demo
+
 ### Project Structure
 
 ```
@@ -113,25 +145,34 @@ music_sprint/
 │   │   ├── course.py              # Course management
 │   │   ├── course_generator.py   # Factory pattern
 │   │   └── visualizer.py          # Visualization
-│   ├── game/                       # ✨ Phase 3
+│   ├── game/                       # Phase 3
 │   │   ├── character.py           # Character physics & state
 │   │   ├── auto_play_controller.py # AI decision-making
 │   │   ├── game.py                # Main game loop
 │   │   └── renderer.py            # PyGame rendering
+│   ├── score/                      # ✨ Phase 4
+│   │   ├── score_manager.py       # Score calculation & high scores
+│   │   ├── statistics_tracker.py  # Game metrics tracking
+│   │   └── difficulty_analyzer.py # Difficulty analysis
 │   ├── ui/
 │   │   └── file_dialog.py         # File selection UI
 │   └── main.py                    # Phase 1 demo
 ├── tests/
 │   ├── test_audio.py              # Phase 1 tests
 │   ├── test_course.py             # Phase 2 tests
-│   └── test_game.py               # ✨ Phase 3 tests
+│   ├── test_game.py               # Phase 3 tests
+│   └── test_score.py              # ✨ Phase 4 tests
+├── data/
+│   └── scores/                    # ✨ High score storage (JSON)
 ├── demo_phase2.py                 # Phase 2 demo
-├── demo_phase3.py                 # ✨ Phase 3 demo
+├── demo_phase3.py                 # Phase 3 demo
+├── demo_phase4.py                 # ✨ Phase 4 demo
 ├── assets/
 │   └── sample_music/              # Sample audio files
 ├── 20251118_DevLog_MS01.md        # Phase 1 dev log
 ├── 20251118_DevLog_MS02.md        # Phase 2 dev log
-├── 20251118_DevLog_MS03.md        # ✨ Phase 3 dev log
+├── 20251118_DevLog_MS03.md        # Phase 3 dev log
+├── 20251119_DevLog_MS04.md        # ✨ Phase 4 dev log
 └── requirements.txt
 ```
 
@@ -205,6 +246,19 @@ This will:
 **Controls:**
 - SPACE: Start game
 - ESC: Exit
+
+### Phase 4 Demo: Scoring & Statistics
+
+```bash
+python demo_phase4.py
+```
+
+This will:
+1. Generate test audio and analyze difficulty
+2. Simulate game play with statistics tracking
+3. Calculate final score with difficulty multiplier
+4. Save and display high score
+5. Show detailed statistics (15+ metrics)
 
 ### Run tests
 
@@ -302,11 +356,16 @@ This project strictly follows Object-Oriented Programming principles with advanc
 - [x] Unit tests (29 tests - 100% pass)
 - [x] DevLog (20251118_DevLog_MS03.md)
 
-### Phase 4: Game Loop & Scoring (Week 7-8.5)
-- [ ] ScoreManager class
-- [ ] Combo system
-- [ ] Local high scores
-- [ ] Result screen with stats
+### Phase 4: Scoring & Statistics ✅ COMPLETED
+- [x] ScoreManager class (score calculation, difficulty multiplier)
+- [x] StatisticsTracker class (comprehensive game metrics)
+- [x] DifficultyAnalyzer class (BPM, frequency, beat density)
+- [x] Combo system (max 3.0x multiplier)
+- [x] Local high scores (JSON persistence)
+- [x] Play history tracking (last 10 plays)
+- [x] Game integration (real-time stats)
+- [x] Unit tests (24 tests - 100% pass)
+- [x] DevLog (20251119_DevLog_MS04.md)
 
 ### Phase 5: Polish & MVP Release (Week 9-10)
 - [ ] UI/UX improvements

@@ -1,0 +1,50 @@
+{
+  "high_score": {
+    "score": 1647,
+    "timestamp": "2025-11-19T21:50:35.737071",
+    "statistics": {
+      "total_jumps": 13,
+      "total_ducks": 12,
+      "perfect_jumps": 5,
+      "perfect_ducks": 4,
+      "total_actions": 25,
+      "total_perfect_actions": 9,
+      "obstacles_avoided": 25,
+      "obstacles_hit": 5,
+      "total_obstacles": 30,
+      "success_rate": 83.33333333333334,
+      "current_combo": 0,
+      "max_combo": 25,
+      "avg_combo": 25.0,
+      "timing_accuracy": 0.745,
+      "perfect_rate": 36.0,
+      "game_duration": 10.0,
+      "actions_per_second": 2.5
+    }
+  },
+  "play_history": [
+    {
+      "score": 1647,
+      "timestamp": "2025-11-19T21:50:35.737071",
+      "statistics": {
+        "total_jumps": 13,
+        "total_ducks": 12,
+        "perfect_jumps": 5,
+        "perfect_ducks": 4,
+        "total_actions": 25,
+        "total_perfect_actions": 9,
+        "obstacles_avoided": 25,
+        "obstacles_hit": 5,
+        "total_obstacles": 30,
+        "success_rate": 83.33333333333334,
+        "current_combo": 0,
+        "max_combo": 25,
+        "avg_combo": 25.0,
+        "timing_accuracy": 0.745,
+        "perfect_rate": 36.0,
+        "game_duration": 10.0,
+        "actions_per_second": 2.5
+      }
+    }
+  ]
+}
