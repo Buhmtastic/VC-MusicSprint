@@ -4,5 +4,6 @@ UI module
 """
 
 from .file_dialog import FileDialog
+from .result_screen import ResultScreen
 
-__all__ = ['FileDialog']
+__all__ = ['FileDialog', 'ResultScreen']
